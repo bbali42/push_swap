@@ -12,19 +12,32 @@
 
 #include "push_swap.h"
 
-static void	init_stack(t_stack **stack, char **av)
+static t_stack	**init_stack(t_args **args)
 {
+	t_stack	**stack;
 	t_stack	*new;
-	int		i;
+	t_args	*head;
 
-	i = 1;
-	while (av[i])
+	stack = (t_stack **)malloc(sizeof(t_stack *));
+	if (!stack)
+		return (NULL);
+	*stack = NULL;
+	head = *args;
+	while (head)
 	{
-		new = ft_stacknew(ft_atoi(av[i]));
+		new = ft_stacknew(ft_atoi(head->av));
+		if (!new)
+		{
+			free_stack(stack);
+			free_args(args);
+			return (NULL);
+		}
 		ft_stackadd_back(stack, new);
-		i++;
+		head = head->next;
 	}
 	index_stack(stack);
+	free_args(args);
+	return (stack);
 }
 
 static void	sort_stack(t_stack **a)
@@ -59,11 +72,16 @@ static void	sort_stack(t_stack **a)
 int	main(int ac, char **av)
 {
 	t_stack	**a;
+	t_args	**args;
 
-	if (!check_args(ac, av))
+	if (ac < 2)
 		return (0);
-	a = (t_stack **)malloc(sizeof(t_stack *));
-	init_stack(a, av);
+	args = init_args(av);
+	if (!args || !check_args(args))
+		return (0);
+	a = init_stack(args);
+	if (!a)
+		return (0);
 	if (is_sorted(a))
 	{
 		free_stack(a);

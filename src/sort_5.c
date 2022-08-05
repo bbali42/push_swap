@@ -126,5 +126,5 @@ int	small_sort(t_stack **a, t_stack **b, t_ops **ops)
 	if (size == 5)
 		if (!sort_5(a, b, ops))
 			return (0);
-	return (1);
+	return (is_sorted(a));
 }

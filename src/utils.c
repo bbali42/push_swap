@@ -43,6 +43,22 @@ void	free_ops(t_ops **ops)
 	free(ops);
 }
 
+void	free_args(t_args **args)
+{
+	t_args	*head;
+	t_args	*tmp;
+
+	head = *args;
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp->av);
+		free(tmp);
+	}
+	free(args);
+}
+
 void	ft_error(t_stack **a, t_stack **b, t_ops **ops)
 {
 	free_stack(a);

@@ -6,7 +6,7 @@
 /*   By: bbali <bbali@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 12:46:16 by bbali             #+#    #+#             */
-/*   Updated: 2021/12/01 17:53:55 by bbali            ###   ########.fr       */
+/*   Updated: 2022/07/25 17:21:08 by bbali            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,18 @@ static	char	*ft_malloc_str(char const *str, char set)
 	return (res);
 }
 
+static int	ft_free(char **strs, int i)
+{
+	if (!strs[i])
+	{
+		while (i-- > 0)
+			free(strs[i]);
+		free(strs);
+		return (0);
+	}
+	return (1);
+}
+
 char	**ft_split(char const *s, char c)
 {
 	int		i;
@@ -68,6 +80,8 @@ char	**ft_split(char const *s, char c)
 		if (*s && *s != c)
 		{
 			res[i] = ft_malloc_str(s, c);
+			if (!ft_free(res, i))
+				return (NULL);
 			i++;
 			while (*s && *s != c)
 				s++;

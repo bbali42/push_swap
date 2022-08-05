@@ -58,24 +58,3 @@ int	get_min(t_stack **stack, int val)
 	}
 	return (min);
 }
-
-void	make_top(t_stack **stack, int distance, t_ops **ops)
-{
-	t_stack	*head;
-	int		tmp;
-
-	if (distance == 0)
-		return ;
-	head = *stack;
-	tmp = ft_stacksize(head) - distance;
-	if (distance <= (ft_stacksize(head) / 2))
-	{
-		while (distance-- > 0)
-			ra(stack, ops);
-	}
-	else
-	{
-		while (tmp-- > 0)
-			rra(stack, ops);
-	}
-}

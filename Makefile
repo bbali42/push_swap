@@ -13,13 +13,16 @@
 NAME		=	push_swap
 
 CC			=	gcc
-FLAGS		=	-Wall -Wextra -Werror -g
+FLAGS		=	-Wall -Wextra -Werror #-g
 INC			=	-I ./inc/ -I ./libs/libft/inc
 LIB			=	-L ./libs/libft -lft
 LIB_DIR		=	libs/libft
-
+DEP_INC		=	./inc/push_swap.h
 SRC			=	main.c \
 				check_args.c \
+				args_parse.c \
+				args_function.c \
+				args_utils.c \
 				stack_function.c \
 				ops_function.c \
 				radix_sort.c \
@@ -46,7 +49,7 @@ $(NAME):	$(OBJ)
 			$(CC) $(FLAGS) -o $@ $^ $(LIB)
 			@echo "$(_MEGAWHITE)push_swap ✔️$(_WHITE_)"
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(DEP_INC)
 				@echo "$(_YELLOW_)$@$(_CYAN_)\r"
 				@mkdir -p $(OBJ_DIR)
 				@$(CC) $(CFLAGS) $(INC) -o $@ -c $< 

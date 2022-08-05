@@ -12,91 +12,93 @@
 
 #include "push_swap.h"
 #define INT_MAX "2147483647"
-#define INT_MIN "-2147483648"
+#define INT_MIN "2147483648"
 
-static int	is_num(int n)
-{
-	if (n >= '0' && n <= '9')
-		return (1);
-	return (0);
-}
-
-static int	check_format(char **args)
+static int	check_format(t_args *head)
 {
 	int		i;
-	int		j;
+	t_args	*tmp;
 
-	i = 1;
-	while (args[i])
+	tmp = head;
+	while (tmp)
 	{
-		j = 0;
-		if (args[i][j] == '-' || args[i][j] == '+')
-			j++;
-		while (args[i][j])
+		i = 0;
+		if (tmp->av[i] == '-' || tmp->av[i] == '+')
+			i++;
+		while (tmp->av[i] == '0' && tmp->av[i + 1])
+			i++;
+		while (tmp->av[i])
 		{
-			if (!is_num(args[i][j]))
+			if (!ft_isdigit(tmp->av[i]))
 				return (0);
-			j++;
+			i++;
 		}
-		i++;
+		tmp = tmp->next;
 	}
 	return (1);
 }
 
-static int	check_dup(char **args)
+static int	check_dup(t_args *head)
 {
-	int		i;
-	int		j;
+	t_args	*i;
+	t_args	*j;
 
-	i = 1;
-	while (args[i])
+	i = head;
+	while (i)
 	{
-		j = i + 1;
-		while (args[j])
+		j = i->next;
+		while (j)
 		{
-			if (!ft_strcmp(args[i], args[j]))
+			if (ft_atoi(i->av) == ft_atoi(j->av))
 				return (0);
-			j++;
+			j = j->next;
 		}
-		i++;
+		i = i->next;
 	}
 	return (1);
 }
 
-static int	check_int_max(char **args)
+static int	check_int_max(t_args **head)
 {
+	t_args	*tmp;
+	char	sign;
 	int		i;
 
-	i = 1;
-	while (args[i])
+	sign = '+';
+	i = 0;
+	tmp = *head;
+	while (tmp)
 	{
-		if (ft_strlen(args[i]) == ft_strlen(INT_MAX))
+		if (tmp->av[i] == '-' || tmp->av[i] == '+')
 		{
-			if (ft_strcmp(args[i], INT_MAX) > 0)
-				return (0);
+			if (tmp->av[i] == '-')
+				sign = '-';
+			i++;
 		}
-		else if (ft_strlen(args[i]) > ft_strlen(INT_MAX))
+		while (tmp->av[i] == '0')
+				i++;
+		if (sign == '+' && ft_strdigit_cmp(tmp->av, i, INT_MAX) > 0)
 			return (0);
-		if (ft_strlen(args[i]) == ft_strlen(INT_MIN))
-		{
-			if (ft_strcmp(args[i], INT_MIN) > 0)
-				return (0);
-		}
-		else if (ft_strlen(args[i]) > ft_strlen(INT_MIN))
+		if (sign == '-' && ft_strdigit_cmp(tmp->av, i, INT_MIN) > 0)
 			return (0);
-		i++;
+		tmp = tmp->next;
+		i = 0;
 	}
 	return (1);
 }
 
-int	check_args(int ac, char **args)
+int	check_args(t_args **args)
 {
-	if (!check_format(args) || !check_dup(args) || !check_int_max(args))
+	if (!check_format(*args) || !check_int_max(args) || !check_dup(*args))
 	{
+		free_args(args);
 		ft_putendl_fd("Error", STDERR_FILENO);
 		return (0);
 	}
-	if (ac <= 2)
+	if (ft_args_size(*args) < 2)
+	{
+		free_args(args);
 		return (0);
+	}
 	return (1);
 }

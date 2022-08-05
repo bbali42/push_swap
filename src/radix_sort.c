@@ -66,4 +66,5 @@ int	radix_sort(t_stack **a, t_stack **b, t_ops **ops)
 		if (!pa_all(a, b, ops))
 			return (0);
 	}
+	return (is_sorted(a));
 }
